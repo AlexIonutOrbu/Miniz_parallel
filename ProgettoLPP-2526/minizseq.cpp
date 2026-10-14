@@ -1,7 +1,7 @@
 /*
  * miniz source code: https://github.com/richgel999/miniz
  * https://code.google.com/archive/p/miniz/
- * 
+ *
  * This is a reworked version of the example3.c file distributed with the miniz.c.
  * --------------------
  * example3.c - Demonstrates how to use miniz.c's deflate() and inflate() functions for simple file compression.
@@ -10,30 +10,37 @@
  * -------------------
  *
  */
-
-#include <cstdio>
-#include <config.hpp>
+#include <chrono>
 #include <cmdline.hpp>
+#include <config.hpp>
+#include <cstdio>
+#include <iostream>
 #include <utility.hpp>
+using clock_type = std::chrono::steady_clock;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     // parse command line arguments and set some global variables
-    long start=parseCommandLine(argc, argv);
-    if (start<0) return -1;
-  
-	bool success = true;
-	while(argv[start]) {
-		if (isDirectory(argv[start])) {
-			success &= walkDir(argv[start]);
-		} else {
-			success &= doWork(argv[start]);
-		}
-		start++;
-	}
-	if (!success) {
-		printf("Exiting with (some) Error(s)\n");
-		return -1;
-	}
-	printf("Exiting with Success\n");
-	return 0;
+    long start = parseCommandLine(argc, argv);
+    if (start < 0) return -1;
+    auto t0 = clock_type::now();
+    bool success = true;
+    while (argv[start]) {
+        if (isDirectory(argv[start])) {
+            success &= walkDir(argv[start]);
+        } else {
+            success &= doWork(argv[start]);
+        }
+        start++;
+    }
+    if (!success) {
+        printf("Exiting with (some) Error(s)\n");
+        return -1;
+    }
+    printf("Exiting with Success\n");
+    auto t1 = clock_type::now();
+    double tsecSeq = std::chrono::duration<double>(t1 - t0).count();
+    std::cout.setf(std::ios::fixed);
+    std::cout.precision(6);
+    std::cout << "Parallel time = " << tsecSeq << " (s)\n";
+    return 0;
 }

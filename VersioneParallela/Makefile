@@ -2,7 +2,7 @@ CXX		= g++ -std=c++20
 INCLUDES	= -I . -I miniz -I ./include
 CXXFLAGS  	+= -Wall 
 
-LDFLAGS 	= #-pthread -fopenmp
+LDFLAGS 	= -pthread #-fopenmp
 OPTFLAGS	= -O3 -march=native
 
 TARGETS		= minizpar
