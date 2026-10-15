@@ -1,0 +1,40 @@
+    13.96%  minizpar  minizpar              [.] tdefl_compress_normal.constprop.0
+    11.65%  minizpar  libc.so.6             [.] __memset_avx2_unaligned_erms
+     3.94%  minizpar  [unknown]             [k] 0xffffffffad8001bd
+     1.81%  minizpar  minizpar              [.] mz_adler32
+     1.54%  minizpar  [unknown]             [k] 0xffffffffad90410b
+     1.34%  minizpar  minizpar              [.] tdefl_start_dynamic_block
+     1.00%  minizpar  [unknown]             [k] 0xffffffffaee8bdeb
+     0.98%  minizpar  [unknown]             [k] 0xffffffffad904109
+     0.87%  minizpar  minizpar              [.] tdefl_radix_sort_syms
+     0.70%  minizpar  minizpar              [.] tdefl_optimize_huffman_table.constprop.1
+     0.46%  minizpar  minizpar              [.] doWork(char const*)
+     0.44%  minizpar  libstdc++.so.6.0.33   [.] std::filesystem::__cxx11::path::_M_split_cmpts()
+     0.42%  minizpar  [unknown]             [k] 0xffffffffad904104
+     0.41%  minizpar  [unknown]             [k] 0xffffffffad800080
+     0.38%  minizpar  [unknown]             [k] 0xffffffffae429de4
+     0.36%  minizpar  [unknown]             [k] 0xffffffffae04d337
+     0.30%  minizpar  [unknown]             [k] 0xffffffffad800005
+     0.29%  minizpar  [unknown]             [k] 0xffffffffadf79f5e
+     0.29%  minizpar  minizpar              [.] tdefl_calculate_minimum_redundancy
+     0.28%  minizpar  libc.so.6             [.] _int_free
+     0.28%  minizpar  [unknown]             [k] 0xffffffffad800002
+     0.26%  minizpar  minizpar              [.] tdefl_compress_lz_codes
+     0.26%  minizpar  [unknown]             [k] 0xffffffffae429de9
+     0.21%  minizpar  [unknown]             [k] 0xffffffffae2f6a09
+     0.21%  minizpar  libc.so.6             [.] malloc
+     0.21%  minizpar  libc.so.6             [.] _int_malloc
+     0.19%  minizpar  libc.so.6             [.] __memmove_avx_unaligned_erms
+     0.19%  minizpar  [unknown]             [k] 0xffffffffad80012b
+     0.19%  minizpar  [unknown]             [k] 0xffffffffae51c1b0
+     0.18%  minizpar  [unknown]             [k] 0xffffffffae04a53c
+     0.18%  minizpar  [unknown]             [k] 0xffffffffaee81b29
+     0.15%  minizpar  libstdc++.so.6.0.33   [.] std::filesystem::__cxx11::path::_List::_Impl_deleter::operator()(std::filesystem::__cxx11::path::_List::_Impl*) const
+     0.15%  minizpar  libc.so.6             [.] _IO_file_fopen@@GLIBC_2.2.5
+     0.15%  minizpar  [unknown]             [k] 0xffffffffad800112
+     0.15%  minizpar  [unknown]             [k] 0xffffffffaee9af23
+     0.15%  minizpar  [unknown]             [k] 0xffffffffae2f6a0c
+     0.15%  minizpar  libc.so.6             [.] __GI___fstatat64
+     0.14%  minizpar  [unknown]             [k] 0xffffffffae0572ca
+     0.14%  minizpar  [unknown]             [k] 0xffffffffada8d4ed
+     0.14%  minizpar  minizpar              [.] walkDirParallel(char const*, threadPool&)

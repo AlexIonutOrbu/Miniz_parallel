@@ -15,7 +15,7 @@ struct Config {
     std::string out_ext = ".defl";                                   // extension for compressed files (default: .defl)
     unsigned int num_threads = std::thread::hardware_concurrency();  // -t number of threads (default: hardware concurrency)
     std::size_t big_file_size = 1024 * 1024 * 4;                     // -s size of a big file (default: 4MB)
-    std::size_t small_file_block_size = 1024 * 1024;                 // -b size of a block of small files (default: 1MB)
+    std::size_t small_file_block_size = 1024 * 1024 * 4;             // -b size of a block of small files (default: 1MB)
 };
 
 // Unique instance of the global cfg variable (C++17 inline variable)

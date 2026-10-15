@@ -295,23 +295,43 @@ inline bool walkDir(const char* dir_cstr) {
     }
     return all_ok;
 }*/
+
 inline bool walkDirParallel(const char* dir_cstr, threadPool& pool) {
     const fs::path root(dir_cstr);
     if (!fs::exists(root) || !fs::is_directory(root)) {
         std::fprintf(stderr, "Non è una directory: %s\n", dir_cstr);
         return false;
     }
+    constexpr std::size_t MAX_BATCH_SIZE = 16;  // small files limit
+    std::size_t current_batch_size = 0;
+    std::vector<std::string> batch;
+    batch.reserve(MAX_BATCH_SIZE);
     bool all_ok = true;
     std::vector<std::future<bool>> F;
-
-    auto handle = [&](const fs::path& p) {
-        if (!should_process(p)) {
-            if (cfg.verbose)
-                std::fprintf(stderr, "Skip: %s\n", p.string().c_str());
-            return true;
+    auto handle_batch = [&](std::vector<std::string> batch) {
+        bool all_ok = true;
+        for (const auto& p : batch) {
+            all_ok &= doWork(p.c_str());
         }
-        return doWork(p.string().c_str());
+        return all_ok;
     };
+    auto handle_file = [&](const fs::path& p, std::size_t fsize) {
+        if (fsize >= cfg.big_file_size) {
+            // TODO: handling of big file
+        } else {
+            // if is a small file
+            if ((fsize + current_batch_size > cfg.small_file_block_size || batch.size() >= MAX_BATCH_SIZE) && !batch.empty()) {
+                // will call handle_batch and clear the batch related variables
+                F.emplace_back(pool.submit(handle_batch, std::move(batch)));
+                // handle_batch(std::move(batch));
+                batch.clear();
+                batch.reserve(MAX_BATCH_SIZE);
+                current_batch_size = 0;
+            }
+            current_batch_size += fsize;
+            batch.emplace_back(p.string());
+        }
+    };  // takes a file and decides if a task should be created
     if (cfg.recursive) {
         fs::directory_options opts = fs::directory_options::skip_permission_denied;
         for (auto it = fs::recursive_directory_iterator(root, opts),
@@ -319,13 +339,34 @@ inline bool walkDirParallel(const char* dir_cstr, threadPool& pool) {
             it != end; ++it) {
             std::error_code ec;
             if (it->is_symlink(ec) || it->is_directory(ec)) continue;
-            if (it->is_regular_file(ec)) F.emplace_back(pool.submit(handle, it->path()));
+            if (it->is_regular_file(ec)) {
+                if (!should_process(it->path())) {
+                    if (cfg.verbose)
+                        std::fprintf(stderr, "Skip: %s\n", it->path().string().c_str());
+                    continue;
+                }
+                std::size_t fsize = it->file_size(ec);
+                handle_file(it->path(), fsize);
+            }
         }
     } else {
         for (auto& de : fs::directory_iterator(root, fs::directory_options::skip_permission_denied)) {
             std::error_code ec;
-            if (de.is_regular_file(ec)) F.emplace_back(pool.submit(handle, de.path()));
+            if (de.is_regular_file(ec)) {
+                if (!should_process(de.path())) {
+                    if (cfg.verbose)
+                        std::fprintf(stderr, "Skip: %s\n", de.path().string().c_str());
+                    continue;
+                }
+                std::size_t fsize = de.file_size(ec);
+                handle_file(de.path(), fsize);
+            }
         }
+    }
+    // TODO: will call handle for the remaining files on the batch
+    std::cout << "sono stati creati task:" << F.size() << std::endl;
+    if (!batch.empty()) {
+        F.emplace_back(pool.submit(handle_batch, std::move(batch)));
     }
     for (size_t i = 0; i < F.size(); ++i) {
         all_ok &= F[i].get();
