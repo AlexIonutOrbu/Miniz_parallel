@@ -1,0 +1,22 @@
+# Eseguibili e build
+minizpar
+miniz
+*.o
+*.a
+*.out
+build/
+
+# Cartelle e file di test
+test_*
+*_backup
+*_compressed
+*.tmp
+*.defl
+*.defl.tmp
+*.log
+
+# Editor e sistema
+.vscode/
+.idea/
+.DS_Store
+*~

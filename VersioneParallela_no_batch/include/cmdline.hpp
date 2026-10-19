@@ -18,7 +18,7 @@ Opzioni:
   -h         Help
   -t         Number of Threads (parallel)
   -s         Size of a big file (parallel)
-  -b         Size of a block of small files (parallel)
+  -b         Size of a block for the big file
 
 Esempio:
   %s -r 1 -C 0 mydir file1.bin file2.txt
@@ -69,7 +69,7 @@ inline long parseCommandLine(int argc, char* argv[]) {
             } else if (opt == "-s") {
                 cfg.big_file_size = static_cast<std::size_t>(val);
             } else if (opt == "-b") {
-                cfg.small_file_block_size = static_cast<std::size_t>(val);
+                cfg.block_size = static_cast<std::size_t>(val);
             } else if (opt == "-C") {
                 if (seenD) {
                     std::fprintf(stderr, "Error: only one between -C and -D.\n");

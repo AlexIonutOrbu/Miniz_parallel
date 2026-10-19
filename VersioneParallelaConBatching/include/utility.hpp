@@ -318,6 +318,10 @@ inline bool walkDirParallel(const char* dir_cstr, threadPool& pool) {
     auto handle_file = [&](const fs::path& p, std::size_t fsize) {
         if (fsize >= cfg.big_file_size) {
             // TODO: handling of big file
+F.emplace_back(pool.submit([](std::string path_str) {
+                return doWork(path_str.c_str());
+            },
+                p.string()));
         } else {
             // if is a small file
             if ((fsize + current_batch_size > cfg.small_file_block_size || batch.size() >= MAX_BATCH_SIZE) && !batch.empty()) {
